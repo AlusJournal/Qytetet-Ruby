@@ -1,14 +1,17 @@
 #encoding: utf-8
 require_relative "sorpresa"
 require_relative "tipo_sorpresa"
+require_relative "tablero"
+require_relative "casilla"
 module ModeloQytetet
   class PruebaQytetet
     def initialize
       @@mazo = Array.new
+      @tablero = Tablero.new
     end 
     
     def inicializar_sorpresas
-      @@mazo<< Sorpresa.new("Un fan anónimo ha pagado tu fianza. Sales de la cárcel", 0, TipoSorpresa::SALIRCARCEL)
+      @@mazo<< Sorpresa.new("Un fan anónimo ha pagado tu fianza. Sales de la cárcel", @tablero.carcel.numero_casilla, TipoSorpresa::SALIRCARCEL)
       @@mazo<< Sorpresa.new("Te hemos pillado con chanclas y calcetines, lo sentimos, ¡debes ir a la carcel!", 9, TipoSorpresa::IRACASILLA)
       @@mazo<< Sorpresa.new("¡Felicidades! hoy es el día de tu no cumpleaños, recibes un regalo de todos", 200, TipoSorpresa::PORJUGADOR)
       @@mazo<< Sorpresa.new("La liga antisupersticion te envia de viaje al numero 13", 13, TipoSorpresa::IRACASILLA)
