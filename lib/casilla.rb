@@ -26,7 +26,7 @@ module ModeloQytetet
        casilla
      end
      
-     def asignar_oropietario(jugador)
+     def asignar_propietario(jugador)
        
      end
      
@@ -51,7 +51,7 @@ module ModeloQytetet
      end
      
      def esta_hipotecada
-       
+       titulo.hipotecada
      end
      
      def get_coste_hipoteca
@@ -83,7 +83,11 @@ module ModeloQytetet
      end
  
      def soy_edificable
-       
+       esEdificable = false
+       if (@casilla == TipoCasilla::CALLE)
+         esEdificable = true
+       end
+       esEdificable
      end
      
      def tengo_propietario

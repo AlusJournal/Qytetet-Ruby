@@ -7,7 +7,7 @@ module ModeloQytetet
     attr_reader :factor_revalorizacion
     attr_reader :hipoteca_base
     attr_reader :precio_edificar
-    attr_writer :casilla_actual
+    attr_accessor :casilla
     attr_writer :propietario
     def initialize(nombre, alquiler_base, factor_revalorizacion, hipoteca_base, precio_edificar)
       @nombre = nombre
@@ -27,7 +27,11 @@ module ModeloQytetet
     end
     
     def tengo_propietario
-      
+      propietario = false
+      if(@propietario != nil)
+        propietario = true
+      end
+      propietario
     end
     
     def to_s

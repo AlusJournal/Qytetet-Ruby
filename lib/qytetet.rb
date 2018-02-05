@@ -56,10 +56,23 @@ module ModeloQytetet
       
     end
     def propiedades_hipotecadas_jugador(hipotecada)
+      titulos = @jugador_actual.obtener_propiedades_hipotecadas(hipotecada)
+      casillas = Array.new
       
+      titulos.each{ |titulo|
+        casillas<< titulo.casilla 
+      }
+      casillas
     end
     def siguiente_jugador
-      
+      siguiente = 0;
+      if @jugador_actual != nil
+        index = @jugadores.index(@jugador_actual)
+        if index < (@jugadores.size - 1)
+          siguiente = index + 1
+        end
+      end
+      @jugador_actual = @jugadores[siguiente]
     end
     def vender_propiedad(casilla)
       
@@ -93,7 +106,12 @@ module ModeloQytetet
     end
     
     def salida_jugadores
+      @jugadores.each { |jugador| 
+        jugador.casilla_actual(tablero.obtener_casilla_numero(0))
+        jugador.saldo(7500)
+      }
       
+      @jugador_actual = @jugadores[ rand()*@jugadores.size() -1]
     end
   end
 end
