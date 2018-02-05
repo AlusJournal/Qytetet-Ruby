@@ -1,7 +1,4 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
-
+#encoding: utf-8
 module ModeloQytetet
   class Casilla
     attr_reader :numero_casilla
@@ -11,21 +8,95 @@ module ModeloQytetet
     attr_reader :casilla
     attr_accessor :titulo
     
-    def initialize(numero_casilla, coste, titulo)
-      @numero_casilla = numero_casilla 
-      @coste = coste
-      @num_hoteles = 0
-      @num_casas = 0
-      @casilla = TipoCasilla::CALLE
-      @titulo = titulo
-    end
+    def initialize(tipo, numero_casilla)                   
+       @numero_casilla = numero_casilla
+       @tipo = tipo
+       @coste = 0
+       @num_hoteles = 0    
+       @num_casas = 0    
+       @titulo = nil    
+     end    
+         
+     def self.init_calle(coste, numero_casilla, titulo)    
+       casilla = new(TipoCasilla::CALLE, numero_casilla)    
+       casilla.coste = coste    
+       casilla.num_hoteles = 0    
+       casilla.num_casas = 0    
+       casilla.titulo = titulo   
+       casilla
+     end
+     
+     def asignar_oropietario(jugador)
+       
+     end
+     
+     def calcular_valor_hipoteca
+       
+     end
+     
+     def cancelar_hipoteca
+       
+     end
+     
+     def cobrar_alquiler
+       
+     end
+     
+     def edificar_casa
+       
+     end
+     
+     def edificar_hotel
+       
+     end
+     
+     def esta_hipotecada
+       
+     end
+     
+     def get_coste_hipoteca
+       
+     end
+     
+     def get_precio_edificar
+       
+     end
+     
+     def hipotecar
+       
+     end
+     
+     def precio_total_comprar
+       
+     end
+     
+     def propietario_encarcelado
+       
+     end
+     
+     def se_puede_edificar_casa
+       
+     end
+     
+     def se_puede_edificar_hotel
+       
+     end
+ 
+     def soy_edificable
+       
+     end
+     
+     def tengo_propietario
+       
+     end
+     
+     def vender_titulo
+       
+     end
     
-    def initialize(numero_casilla, casilla)
-      @numero_casilla = numero_casilla 
-      @casilla = casilla
-    end
-    
-    #SetTituloPropiedad preguntar
+     def asignar_titulo_propiedad
+       
+     end
     
     def to_s
       "#{@numero_casilla}. Coste: #{@coste}"
