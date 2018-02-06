@@ -52,7 +52,9 @@ module ModeloQytetet
      end
      
      def edificar_hotel
-       
+       @num_hoteles + 1
+       coste_edificar_hotel = @titulo.precio_edificar
+       coste_edificar_hotel
      end
      
      def esta_hipotecada
@@ -81,19 +83,27 @@ module ModeloQytetet
      end
      
      def se_puede_edificar_casa
-       
+       se_puede_edificar = false
+       if(@num_casas<4)
+         se_puede_edificar = true
+       end
+       se_puede_edificar
      end
      
      def se_puede_edificar_hotel
-       
+       se_puede_edificar = false
+       if(@num_casas>4)
+         if(@num_hoteles<4)
+           se_puede_edificar = true
+         end
+       end
+       se_puede_edificar
      end
  
      def soy_edificable
-       esEdificable = false
-       if (@tipo == TipoCasilla::CALLE)
-         esEdificable = true
-       end
-       esEdificable
+       es_edificable = false
+       es_edificable = true if (@tipo == TipoCasilla::CALLE)
+       es_edificable
      end
      
      def tengo_propietario
@@ -101,7 +111,11 @@ module ModeloQytetet
      end
      
      def vender_titulo
-       
+       @titulo.propietario = nil
+       precio_compra = @coste+(@num_casas+@num_hoteles)*@titulo.precio_edificar
+       @num_hoteles = 0
+       @num_casas = 0
+       return (precio_compra + (@titulo.factor_revalorizacion *precio_compra)).round
      end
     
      def asignar_titulo_propiedad

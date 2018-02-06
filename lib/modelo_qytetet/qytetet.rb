@@ -59,10 +59,10 @@ module ModeloQytetet
       if (casilla.soy_edificable)
         se_puede_edificar = casilla.se_puede_edificar_casa
         if (se_puede_edificar)
-          puedo_edificar = jugador_actual.puedo_edificar_casas(casilla)
+          puedo_edificar = @jugador_actual.puedo_edificar_casas(casilla)
           if(puedo_edificar)
             coste_edificar_casa = casilla.edificar_casa
-            jugador_actual.modificar_saldo(coste_edificar_casa)
+            @jugador_actual.modificar_saldo(coste_edificar_casa)
           end
         end
       end
@@ -70,7 +70,18 @@ module ModeloQytetet
     end
     
     def edificar_hotel(casilla)
-      
+      puedo_edificar = false
+      if (casilla.soy_edificable)
+        se_puede_edificar = casilla.se_puede_edificar_hotel
+        if (se_puede_edificar)
+          puedo_edificar = @jugador_actual.puedo_edificar_hoteles(casilla)
+          if(puedo_edificar)
+            coste_edificar_hotel = casilla.edificar_hotel
+            @jugador_actual.modificar_saldo(coste_edificar_hotel)
+          end
+        end
+      end
+      puedo_edificar
     end
     
     def get_carta_actual
@@ -152,6 +163,7 @@ module ModeloQytetet
       }
       casillas
     end
+    
     def siguiente_jugador
       siguiente = 0;
       if @jugador_actual != nil

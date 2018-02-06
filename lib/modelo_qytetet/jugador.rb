@@ -13,6 +13,7 @@ module ModeloQytetet
       @nombre = nombre
       @encarcelado = false
       @saldo = 7500
+      @propiedades = Array.new
     end
     
     def get_casilla_actual
@@ -134,7 +135,13 @@ module ModeloQytetet
     end
     
     def puedo_edificar_hotel(casilla)
-      
+      es_mia = es_de_mi_propiedad(casilla)
+      tengo_saldo = false
+      if (es_mia)
+        coste_edificar_hotel = casilla.get_precio_edificar
+        tengo_saldo = tengo_saldo(coste_edificar_hotel)
+      end
+      return (es_mia && tengo_saldo)
     end
     
     def puedo_hipotecar(casilla)
@@ -144,6 +151,7 @@ module ModeloQytetet
     def puedo_pagar_hipoteca(casilla)
       
     end
+    
     def puedo_vender_propiedad(casilla)
       puedo = false
       if (es_de_mi_propiedad(casilla))
@@ -151,24 +159,32 @@ module ModeloQytetet
       end
       puedo
     end
+    
     def set_carta_libertad(carta)
       @carta_libertad = carta
     end
+    
     def set_casilla_actual(casilla)
       @casilla_actual = casilla
     end
+    
     def set_encarcelado(encarcelado)
       @encarcelado = encarcelado
     end
+    
     def tengo_carta_libertad
       tengo = false
       if(@carta_libertad != nil)
         tengo = true
       end
     end
+    
     def vender_propiedad(casilla)
-      
+      precio_venta = casilla.vender_titulo
+      modificar_saldo(precio_venta)
+      eliminar_de_mis_propiedades(casilla)
     end
+    
     def cuantas_casas_hoteles_tengo
       total = 0
       @propiedades.each{ |titulo|
@@ -176,11 +192,13 @@ module ModeloQytetet
       }
       total
     end
+    
     def eliminar_de_mis_propiedades(casilla)
       if(es_de_mi_propiedad(casilla))
         @propiedades.delete(casilla.titulo)
       end
     end
+    
     def es_de_mi_propiedad(casilla)
       tengo = false
       @propiedades.each{ |titulo|
@@ -190,6 +208,7 @@ module ModeloQytetet
       }
       tengo
     end
+    
     def tengo_saldo(cantidad)
       tengo = false
       if (cantidad < @saldo)
@@ -197,6 +216,7 @@ module ModeloQytetet
       end
       tengo
     end
+    
     def to_s
       "Jugador: #{@nombre} \n Saldo: #{@saldo}"
     end
