@@ -9,6 +9,7 @@ module ModeloQytetet
     attr_reader :precio_edificar
     attr_accessor :casilla
     attr_writer :propietario
+    
     def initialize(nombre, alquiler_base, factor_revalorizacion, hipoteca_base, precio_edificar)
       @nombre = nombre
       @hipotecada = false
@@ -19,11 +20,11 @@ module ModeloQytetet
     end
     
     def cobrar_alquiler(coste)
-      
+      @propietario.modificar_saldo((-1)*coste)
     end
     
     def propietario_encarcelado
-      
+      @propietario.encarcelado
     end
     
     def tengo_propietario

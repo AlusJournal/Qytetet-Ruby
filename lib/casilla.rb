@@ -5,7 +5,7 @@ module ModeloQytetet
     attr_accessor :coste
     attr_accessor :num_hoteles
     attr_accessor :num_casas
-    attr_reader :casilla
+    attr_reader :tipo
     attr_accessor :titulo
     
     def initialize(tipo, numero_casilla)                   
@@ -27,11 +27,12 @@ module ModeloQytetet
      end
      
      def asignar_propietario(jugador)
-       
+       @titulo.propietario(jugador)
+       @titulo
      end
      
      def calcular_valor_hipoteca
-       
+       (@titulo.hipoteca_base * num_casas * 0.5 * @titulo.hipoteca_base + num_hoteles * @titulo.hipoteca_base).round
      end
      
      def cancelar_hipoteca
@@ -39,11 +40,15 @@ module ModeloQytetet
      end
      
      def cobrar_alquiler
-       
+       coste_alquiler_base = (@titulo.alquiler_base + (num_casas*0.5 + num_hoteles*2)).round
+       @titulo.cobrar_alquiler(coste_alquiler_base)
+       coste_alquiler_base
      end
      
      def edificar_casa
-       
+       @num_casas + 1
+       coste_edificar_casa = @titulo.precio_edificar
+       coste_edificar_casa
      end
      
      def edificar_hotel
@@ -55,15 +60,16 @@ module ModeloQytetet
      end
      
      def get_coste_hipoteca
-       
+       @titulo.hipoteca_base
      end
      
      def get_precio_edificar
-       
+       @titulo.precio_edificar
      end
      
      def hipotecar
-       
+       @titulo.hipotecada = true
+       calcular_valor_hipoteca
      end
      
      def precio_total_comprar
@@ -71,7 +77,7 @@ module ModeloQytetet
      end
      
      def propietario_encarcelado
-       
+       @titulo.propietario_encarcelado
      end
      
      def se_puede_edificar_casa
@@ -84,14 +90,14 @@ module ModeloQytetet
  
      def soy_edificable
        esEdificable = false
-       if (@casilla == TipoCasilla::CALLE)
+       if (@tipo == TipoCasilla::CALLE)
          esEdificable = true
        end
        esEdificable
      end
      
      def tengo_propietario
-       
+       @titulo.tengo_propietario
      end
      
      def vender_titulo

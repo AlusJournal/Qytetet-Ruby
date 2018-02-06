@@ -17,7 +17,32 @@ module ModeloQytetet
     SALDO_SALIDA = 1000
     
     def aplicar_sorpresa
+      tiene_propietario = false
+      if (carta_actual.tipo == TipoSorpresa.PAGARCOBRAR)
+        @jugador_actual.modificar_saldo(@carta_actual.valor)
+      elsif (carta_actual.tipo == TipoSorpresa.IRACASILLA)
+        es_carcel = @tablero.es_casilla_carcel(@carta_actual.valor)
+        if(es_carcel)
+          encarcelar_jugador
+        else
+          nueva_casilla = @tablero.obtener_casilla_numero(@carta_actual.valor)
+          tiene_propietario = @jugador_actual.actualizar_posicion(nueva_casilla)
+        end
+      elsif (carta_actual.tipo == TipoSorpresa.PORCASAHOTEL)
+        @jugador_actual.pagar_cobrar_por_casa_y_hotel(@carta_actual.valor)
+      elsif (carta_actual.tipo == TipoSorpresa.PORJUGADOR)
+        jugadores.each{ |jugador|
+          jugador.modificar_saldo(@carta_actual.valor)
+          @jugador_actual.modificar_saldo((-1)*@carta_actual.valor)
+        }
+      end
       
+      if (carta_actual.tipo == TipoSorpresa.SALIRCARCEL)
+        @jugador_actual.set_carta_libertad(@carta_actual)
+      else
+        @mazo<< @cartaActual
+      end
+      tiene_propietario
     end
     
     def cancelar_hipoteca(casilla)
@@ -25,36 +50,99 @@ module ModeloQytetet
     end
     
     def comprar_titulo_propiedad
-      
+      puedo_comprar = @jugador_actual.comprar_titulo
+      puedo_comprar
     end
     
     def edificar_casa(casilla)
-      
+      puedo_edificar = false
+      if (casilla.soy_edificable)
+        se_puede_edificar = casilla.se_puede_edificar_casa
+        if (se_puede_edificar)
+          puedo_edificar = jugador_actual.puedo_edificar_casas(casilla)
+          if(puedo_edificar)
+            coste_edificar_casa = casilla.edificar_casa
+            jugador_actual.modificar_saldo(coste_edificar_casa)
+          end
+        end
+      end
+      puedo_edificar
     end
+    
     def edificar_hotel(casilla)
       
     end
+    
     def get_carta_actual
       @carta_actual
     end
+    
     def get_jugador_actual
       @jugador_actual
     end
+    
     def hipotecar_propiedad(casilla)
-      
+      puedo_hipotecar = false
+      if(casilla.soy_edificable)
+        se_puede_edificar = !casilla.esta_hipotecada
+        if(se_puede_hipotecar)
+          puedo_hipotecar = @jugador_actual.puedo_hipotecar(casilla)
+          if(puedo_hipotecar)
+            cantidad_recibida = casilla.hipotecar
+            @jugador_actual.modificar_saldo(cantidad_recibida)
+          end
+        end
+      end
+      puedo_hipotecar
     end
+    
     def inicializar_juego(nombres)
-      
+      inicializar_jugadores(nombres)
+      inicializar_cartas_sorpresa
+      inicializar_tablero
+      salida_jugadores
     end
+    
     def intentar_salir_carcel(metodo)
-      
+      libre = false
+      if (metodo == MetodoSalirCarcel::TIRANDODADO)
+        valor_dado = dado.instance.tirar
+        if(valor_dado > 5)
+          libre = true
+        end
+      elsif (metodo == MetodoSalirCarcel::PAGANDOLIBERTAD)
+        tengo_saldo = @jugador_actual.pagar_libertad((-1)*PRECIO_LIBERTAD)
+        libre = tengo_saldo
+      end
+      libre
     end
+    
     def jugar
-      
+      valor_dado = dado.instance.tirar
+      casilla_posicion = @jugador_actual.casilla_actual
+      nueva_casilla = @tablero.obtener_nueva_casilla(casilla_posicion, valor_dado)
+      tiene_propietario = @jugador_actual.actualizar_posicion(nueva_casilla)
+      if(nueva_casilla.soy_edificable())
+        if(nueva_casilla.tipo == TipoCasilla::JUEZ)
+          encarcelar_jugador
+        elsif nueva_casilla.tipo == TipoCasilla::SORPRESA
+          @carta_actual=@mazo[0]
+          @mazo-=[@carta_actual]
+        end
+      end
+      tiene_propietario
     end
+    
     def obtener_ranking
-      
+        ranking = Array.new
+      @jugadores.each{ |jugador|
+        capital = jugador.obtener_capital()
+        s =" #{jugador.nombre} + \tSaldo: + #{Integer.to_s(capital)}"
+        ranking<<s
+      }
+      ranking
     end
+    
     def propiedades_hipotecadas_jugador(hipotecada)
       titulos = @jugador_actual.obtener_propiedades_hipotecadas(hipotecada)
       casillas = Array.new
@@ -75,10 +163,24 @@ module ModeloQytetet
       @jugador_actual = @jugadores[siguiente]
     end
     def vender_propiedad(casilla)
-      
+      puedo_vender = false;
+        if(casilla.soy_edificable())
+          puedo_vender = @jugador_actual.puedo_vender_propiedad(casilla)
+          if(puedo_vender)
+            @jugador_actual.vender_propiedad(casilla)
+          end
+        end
+        puedo_vender
     end
+    
     def encarcelar_jugador
-      
+      if(!@jugador_actual.tengo_carta_libertad)
+        casilla_carcel = @tablero.carcel
+        @jugador_actual.ir_a_carcel(casilla_carcel)
+      else
+        carta = @jugador_actual.devolver_carta_libertad()
+        @mazo<< carta
+      end
     end
     
     def inicializar_cartas_sorpresa
