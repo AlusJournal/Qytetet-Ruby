@@ -3,12 +3,8 @@ require_relative "../modelo_qytetet/qytetet"
 require_relative "vista_textual_qytetet"
 module InterfazTextualQytetet
   class ControladorQytetet
-    def initialize
-      @juego = ModeloQytetet::Qytetet.new
-      @jugador
-      @casilla
-      @vista = VistaTextualQytetet.new 
-    end
+    
+    include ModeloQytetet
     
     def main 
       inicializacion_juego
@@ -24,7 +20,7 @@ module InterfazTextualQytetet
         if(@jugador.encarcelado)
           @vista.mostrar("Estas en la carcel")
           nro_metodo = @vista.menu_salir_carcel
-          metodo = null
+          metodo = nil
           case (nro_metodo)
           when 0
             metodo = MetodoSalirCarcel::TIRANDODADO
@@ -57,7 +53,7 @@ module InterfazTextualQytetet
               else
                 @vista.mostrar("·Esta casilla no tiene propietario")
                 comprar = @vista.elegir_quiero_comprar
-                if(comprar)
+                if(comprar == 1)
                   puedo_comprar = @juego.comprar_titulo_propiedad
                   if(puedo_comprar)
                     @vista.mostrar("Has comprado la casilla -> #{@jugador.casilla_actual.numero_casilla}")
@@ -82,7 +78,6 @@ module InterfazTextualQytetet
             casillas.each { |casilla|
               lista_propiedades<< casilla.titulo.nombre
             }
-            propiedad_elegida = 0
             if(lista_propiedades.size > 0 && opcion != 0)
               propiedad_elegida = @vista.menu_elegir_propiedad(lista_propiedades)
             end
@@ -132,7 +127,7 @@ module InterfazTextualQytetet
     end
     
     def inicializacion_juego
-      @juego = Qytetet.instance
+      @juego = ModeloQytetet::Qytetet.instance
       @vista = VistaTextualQytetet.new
 
       nombres = Array.new

@@ -8,7 +8,7 @@ module ModeloQytetet
     attr_reader :tipo
     attr_accessor :titulo
     
-    def initialize(tipo, numero_casilla)                   
+    def initialize(numero_casilla, tipo)                   
        @numero_casilla = numero_casilla
        @tipo = tipo
        @coste = 0
@@ -17,17 +17,18 @@ module ModeloQytetet
        @titulo = nil    
      end    
          
-     def self.init_calle(coste, numero_casilla, titulo)    
-       casilla = new(TipoCasilla::CALLE, numero_casilla)    
+     def self.init_calle(numero_casilla, coste, titulo)    
+       casilla = new(numero_casilla, TipoCasilla::CALLE)    
        casilla.coste = coste    
        casilla.num_hoteles = 0    
        casilla.num_casas = 0    
-       casilla.titulo = titulo   
+       casilla.titulo = titulo
+       casilla.titulo.casilla = casilla
        casilla
      end
      
      def asignar_propietario(jugador)
-       @titulo.propietario(jugador)
+       @titulo.propietario = jugador
        @titulo
      end
      
@@ -115,7 +116,7 @@ module ModeloQytetet
        precio_compra = @coste+(@num_casas+@num_hoteles)*@titulo.precio_edificar
        @num_hoteles = 0
        @num_casas = 0
-       return (precio_compra + (@titulo.factor_revalorizacion *precio_compra)).round
+       return (precio_compra + (@titulo.factor_revalorizacion*precio_compra)).round
      end
     
      def asignar_titulo_propiedad

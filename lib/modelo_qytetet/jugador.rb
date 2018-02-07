@@ -29,7 +29,7 @@ module ModeloQytetet
     
     def actualizar_posicion(casilla)
       if(casilla.numero_casilla < @casilla_actual.numero_casilla)
-        modificar_saldo(@qytetet.instance.SALDO_SALIDA)
+        modificar_saldo(Qytetet::SALDO_SALIDA)
       end
       tiene_propietario = false
       @casilla_actual = casilla
