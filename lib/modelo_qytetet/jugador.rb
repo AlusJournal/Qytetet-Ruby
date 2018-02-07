@@ -149,7 +149,11 @@ module ModeloQytetet
     end
     
     def puedo_pagar_hipoteca(casilla)
-      
+      puedo_pagar = false
+      if(puedo_hipotecar(casilla)&& @saldo>casilla.coste)
+        puedo_pagar = true
+      end
+      puedo_pagar
     end
     
     def puedo_vender_propiedad(casilla)

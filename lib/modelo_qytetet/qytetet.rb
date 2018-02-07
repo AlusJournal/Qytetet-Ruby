@@ -16,6 +16,15 @@ module ModeloQytetet
     PRECIO_LIBERTAD = 200
     SALDO_SALIDA = 1000
     
+    def initialize
+      @jugador_actual
+      @jugadores = Array.new
+      @tablero
+      @carta_actual
+      @mazo = Array.new
+      @dado = Dado.new
+    end
+    
     def aplicar_sorpresa
       tiene_propietario = false
       if (carta_actual.tipo == TipoSorpresa.PAGARCOBRAR)
@@ -46,7 +55,18 @@ module ModeloQytetet
     end
     
     def cancelar_hipoteca(casilla)
-      
+      puedo_hipotecar = false
+      if(casilla.soy_edificable)
+        se_puede_hipotecar = casilla.esta_hipotecada
+        if(se_puede_hipotecar)
+          puedo_hipotecar = !@jugador_actual.puedo_hipotecar(casilla)
+          if(puedo_hipotecar)
+            cantidad_recibida = casilla.hipotecar
+            @jugador_actual.modificar_saldo((-1)*cantidad_recibida)
+          end
+        end
+      end
+      puedo_hipotecar
     end
     
     def comprar_titulo_propiedad
