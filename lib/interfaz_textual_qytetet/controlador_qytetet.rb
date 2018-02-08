@@ -84,15 +84,40 @@ module InterfazTextualQytetet
             
             case(opcion)
             when 1 
-              @juego.edificar_casa(casillas[propiedad_elegida])
+              puedo = @juego.edificar_casa(casillas[propiedad_elegida])
+              if(puedo)
+                @vista.mostrar("Se ha podido edificar casa")
+              else
+                @vista.mostrar("No se ha podido edificar casa")
+              end
             when 2
-              @juego.edificar_hotel(casillas[propiedad_elegida])
+              puedo = @juego.edificar_hotel(casillas[propiedad_elegida])
+              if(puedo)
+                @vista.mostrar("Se ha podido edificar hotel")
+              else
+                @vista.mostrar("No se ha podido edificar hotel")
+              end
             when 3
-              @juego.vender_propiedad(casillas[propiedad_elegida])
+              puedo = @juego.vender_propiedad(casillas[propiedad_elegida])
+              if(puedo)
+                @vista.mostrar("Se ha vendido la propiedad")
+              else
+                @vista.mostrar("No se ha vendido la propiedad")
+              end
             when 4
-              @juego.hipotecar_propiedad(casillas[propiedad_elegida])
+              puedo = @juego.hipotecar_propiedad(casillas[propiedad_elegida])
+              if(puedo)
+                @vista.mostrar("Se ha hipotecado la propiedad")
+              else
+                @vista.mostrar("No se ha hipotecado la propiedad")
+              end
             when 5
-              @juego.cancelar_hipoteca(casillas[propiedad_elegida])
+              puedo = @juego.cancelar_hipoteca(casillas[propiedad_elegida])
+              if(puedo)
+                @vista.mostrar("Se ha cancelado la hipoteca")
+              else
+                @vista.mostrar("No se ha cancelado la hipoteca")
+              end
             end
           end
           
