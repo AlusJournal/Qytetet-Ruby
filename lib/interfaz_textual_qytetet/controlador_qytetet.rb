@@ -66,57 +66,30 @@ module InterfazTextualQytetet
           end
           
           if((!@jugador.encarcelado)&&(@jugador.tengo_propiedades)&&(@jugador.saldo > 0))
-            opcion = @vista.menu_gestion_inmobiliaria
-            lista_propiedades= Array.new
-            casillas = Array.new
-            if (opcion == 5)
-              casillas = @juego.propiedades_hipotecadas_jugador(true)
-            else
-              casillas = @juego.propiedades_hipotecadas_jugador(false)
-            end
-            
-            casillas.each { |casilla|
-              lista_propiedades<< casilla.titulo.nombre
-            }
-            if(lista_propiedades.size > 0 && opcion != 0)
-              propiedad_elegida = @vista.menu_elegir_propiedad(lista_propiedades)
-            end
-            
-            case(opcion)
-            when 1 
-              puedo = @juego.edificar_casa(casillas[propiedad_elegida])
-              if(puedo)
-                @vista.mostrar("Se ha podido edificar casa")
-              else
-                @vista.mostrar("No se ha podido edificar casa")
+            gestion = @vista.menu_gestion_inmobiliaria
+            while gestion != 0
+              edit_casilla = elegir_propiedad(@jugador.propiedades).calle
+              case gestion
+                when 1
+                  edificada = @juego.edificar_casa(edit_casilla)
+                  @vista.mostrar(" -> " + (edificada ? "Has edificado" : "No has podido edificar") + " una casa")
+                when 2
+                  edificado = @juego.edificar_hotel(edit_casilla)
+                  @vista.mostrar(" -> " + (edificado ? "Has edificado" : "No has podido edificar") + " un hotel")
+                when 3
+                  vendido = @juego.vender_propiedad(edit_casilla)
+                  @vista.mostrar(" -> " + (vendido ? "Has vendido" : "No has podido vender") + " la casilla")
+                when 4
+                  hipotecada = @juego.hipotecar_propiedad(edit_casilla)
+                  @vista.mostrar(" -> " + (hipotecada ? "Has hipotecado" : "No has podido hipotecar") + " la casilla")
+                when 5
+                  cancelada = @juego.cancelar_hipoteca(edit_casilla)
+                  @vista.mostrar(" -> " + (cancelada ? "Has cancelado" : "No has podido cancelar") + " la hipoteca de la casilla")
               end
-            when 2
-              puedo = @juego.edificar_hotel(casillas[propiedad_elegida])
-              if(puedo)
-                @vista.mostrar("Se ha podido edificar hotel")
+              if @jugador.tengo_propiedades
+                gestion = @vista.menu_gestion_inmobiliaria
               else
-                @vista.mostrar("No se ha podido edificar hotel")
-              end
-            when 3
-              puedo = @juego.vender_propiedad(casillas[propiedad_elegida])
-              if(puedo)
-                @vista.mostrar("Se ha vendido la propiedad")
-              else
-                @vista.mostrar("No se ha vendido la propiedad")
-              end
-            when 4
-              puedo = @juego.hipotecar_propiedad(casillas[propiedad_elegida])
-              if(puedo)
-                @vista.mostrar("Se ha hipotecado la propiedad")
-              else
-                @vista.mostrar("No se ha hipotecado la propiedad")
-              end
-            when 5
-              puedo = @juego.cancelar_hipoteca(casillas[propiedad_elegida])
-              if(puedo)
-                @vista.mostrar("Se ha cancelado la hipoteca")
-              else
-                @vista.mostrar("No se ha cancelado la hipoteca")
+                gestion = 0
               end
             end
           end
@@ -143,10 +116,11 @@ module InterfazTextualQytetet
       @vista.mostrar("\tCasilla\tTitulo");
         
       lista_propiedades= Array.new
-      for prop in propiedades
-        prop_string= prop.numeroCasilla.to_s+' '+prop.titulo.nombre; 
+      propiedades.each { |prop|
+        prop_string= prop.calle.numero_casilla.to_s+' '+prop.nombre
         lista_propiedades<< prop_string
-      end
+      }
+      
       seleccion=@vista.menu_elegir_propiedad(lista_propiedades)
       propiedades.at(seleccion)
     end

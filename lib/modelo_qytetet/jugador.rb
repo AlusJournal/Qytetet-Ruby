@@ -15,7 +15,7 @@ module ModeloQytetet
       @encarcelado = false
       @saldo = 7500
       @propiedades = Array.new
-      @factor_especulador = 1
+      @@factor_especulador = 1
     end
     
     def constructor_copia(jugador)
@@ -27,6 +27,10 @@ module ModeloQytetet
       jugador.propiedades.each { |p|
         @propiedades << p
       }
+    end
+    
+    def factor_especulador
+      @@factor_especulador
     end
     
     def get_casilla_actual
@@ -243,7 +247,7 @@ module ModeloQytetet
     end
     
     def to_s
-      "Jugador: #{@nombre} \n Saldo: #{@saldo}"
+      "Nombre: #{@nombre} \n Factor Especulador: #{@factor_especulador} \n Encarcelado: #{@encarcelado} \n Saldo: #{@saldo} \n @Casilla Actual #{@casilla_actual}\n Carta Libertad #{@carta_libertad}"
     end
   end
 end

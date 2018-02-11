@@ -9,6 +9,7 @@ module ModeloQytetet
     attr_reader :precio_edificar
     attr_accessor :casilla
     attr_accessor :propietario
+    attr_accessor :calle
     
     def initialize(nombre, alquiler_base, factor_revalorizacion, hipoteca_base, precio_edificar)
       @nombre = nombre
@@ -17,6 +18,8 @@ module ModeloQytetet
       @factor_revalorizacion = factor_revalorizacion
       @hipoteca_base = hipoteca_base
       @precio_edificar = precio_edificar
+      @propietario = nil
+      @calle = nil
     end
     
     def cobrar_alquiler(coste)
