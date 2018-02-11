@@ -54,6 +54,11 @@ module ModeloQytetet
           jugador.modificar_saldo(@carta_actual.valor)
           @jugador_actual.modificar_saldo((-1)*@carta_actual.valor)
         }
+      elsif (@carta_actual.tipo == TipoSorpresa::CONVERTIRME)
+        jugador_especulador = @jugador_actual.convertirme(@carta_actual.valor)
+          @jugadores.delete(@jugador_actual)
+          @jugador_actual = jugador_especulador
+          @jugadores << @jugador_actual
       end
       
       if (carta_actual.tipo == TipoSorpresa::SALIRCARCEL)
@@ -237,6 +242,8 @@ module ModeloQytetet
       @mazo << Sorpresa.new("El Presidente te otorga un presupuesto solicitado", 600, TipoSorpresa::PAGARCOBRAR)
       @mazo << Sorpresa.new("Matt Murdock te ha defendido en un juicio y debes pagar sus honorarios", -700, TipoSorpresa::PAGARCOBRAR)
       @mazo << Sorpresa.new("Elisabeth II te ha dado un indulto y puedes abandonar la prisión", 0, TipoSorpresa::SALIRCARCEL)
+      @mazo << Sorpresa.new("¿Pero a tu no te avisaron de que el hotel duMort era peligroso? Pues parace que tarde, ahora eres vampiro", 3000, TipoSorpresa::CONVERTIRME)
+      @mazo << Sorpresa.new("¿Esconder la verdad? Todos lo hemos hecho alguna vez, bienvenida Mentirosa -A.", 5000, TipoSorpresa::CONVERTIRME)
     end
     
     def inicializar_jugadores(nombres)

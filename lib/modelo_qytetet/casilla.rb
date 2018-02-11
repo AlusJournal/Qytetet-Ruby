@@ -85,7 +85,7 @@ module ModeloQytetet
      
      def se_puede_edificar_casa
        se_puede_edificar = false
-       if(@num_casas<4)
+       if(@num_casas<(4 * @titulo.propietario.factor_especulador))
          se_puede_edificar = true
        end
        se_puede_edificar
@@ -93,8 +93,8 @@ module ModeloQytetet
      
      def se_puede_edificar_hotel
        se_puede_edificar = false
-       if(@num_casas>4)
-         if(@num_hoteles<4)
+       if(@num_casas>(4 * @titulo.propietario.factor_especulador))
+         if(@num_hoteles<(4 * @titulo.propietario.factor_especulador))
            se_puede_edificar = true
          end
        end

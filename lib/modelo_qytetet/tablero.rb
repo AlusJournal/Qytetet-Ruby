@@ -68,8 +68,8 @@ module ModeloQytetet
       @casillas<< jessica
       gilmore_girls = Casilla.init_calle(6, 950, TituloPropiedad.new("Girlmore Girls", 65, 12, 300, 300))
       @casillas<< gilmore_girls
-      sense_eight = Casilla.init_calle(4, 900, TituloPropiedad.new("Sense8", 60, 11, 250, 300))
-      @casillas<< sense_eight
+      pll = Casilla.init_calle(4, 900, TituloPropiedad.new("Pretty Little Liars", 60, 11, 250, 300))
+      @casillas<< pll
       daredevil = Casilla.init_calle(2, 800, TituloPropiedad.new("Daredevil", 55, 10, 200, 250))
       @casillas<< daredevil
       shadowhunters = Casilla.init_calle(1, 700, TituloPropiedad.new("ShadowHunters", 50, 10, 150, 250))
